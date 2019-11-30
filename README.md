@@ -7,14 +7,15 @@ Java Curling Game
   - Circle  
     - Stone  
     - Border  
-- Rect  
+  - Rect  
   
 - GameModel  
-基本的にmodelにゲーム内の変数をぶち込む  
-処理も大体ここ  
+基本的にmodelにゲーム内の変数群やオブジェクト群をぶち込む  
+衝突処理も大体ここ  
   
 - GameViewPanel  
-drawを書く感じだが、実際に絵をぶち込む場合はたぶん上に書いたStoneとかRectのdrawの中にぶち込む感じ  
+viewは、各オブジェクトのdrawを実行している感じ  
+実際に絵を入れたりするときは各オブジェクトのdrawメソッドの部分に直接書くことになると思う
   
 - GameFrame ( main )
 現時点でいじる必要はなさそう？  
@@ -22,4 +23,8 @@ drawを書く感じだが、実際に絵をぶち込む場合はたぶん上に�
   
 - GameController  
 プレイヤー操作を受けつけて、model内の変数を操作する  
+model.object.setValue();みたいな。  
   
+# 各クラスのメソッド
+ コメントたくさん書いたから読んで  
+ 
