@@ -13,7 +13,7 @@ Java Curling Game
 基本的にmodelにゲーム内の変数群やオブジェクト群をぶち込む  
 衝突処理も大体ここ  
 controllerとかviewでここにいるやつらにアクセスしたり、  
-変更したりするのでset関数、get関数が大量にある  
+変更したりするのでset、getメソッドが大量にある  
   
 - GameViewPanel  
 viewは、各オブジェクトのdrawを実行している感じ  
