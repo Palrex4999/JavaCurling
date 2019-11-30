@@ -235,6 +235,7 @@ class GameModel extends Observable implements ActionListener{
   public int getH() { return WINDOW_HEIGHT; } 
   public boolean getCanRot() { return canRot; }
   public boolean getCanRub() { return canRub; }
+  public boolean getCanChangeTurn() { return canChangeTurn; }
   public float getRotation() { return rotation; }
   
   public ArrayList<GameObject> getGameObjects() {
@@ -276,6 +277,7 @@ class GameModel extends Observable implements ActionListener{
 
   public void setCanRot( boolean b ) { this.canRot = b; }
   public void setCanRub( boolean b ) { this.canRub = b; }
+  public void setCanChangeTurn( boolean b ) { this.canChangeTurn = b; }
   public void setRotation( float rot ) { this.rotation = rot; }
 
 
@@ -285,6 +287,7 @@ class GameModel extends Observable implements ActionListener{
   }
   /* ストーンが外側にいるかどうか */
   public boolean isOut( Stone s ){
+    /* 判定基準は上に突き抜けたかどうかのみ. のちに要検証 */
     return ( s.getY() < 0 );
   }
 
@@ -303,6 +306,7 @@ class GameModel extends Observable implements ActionListener{
       case "Border":
             newObj = new Border( x, y, r, c );
             break;
+       /* 他のオブジェクトはここに追加 */
       default:
             return;
     }
@@ -317,6 +321,7 @@ class GameModel extends Observable implements ActionListener{
       case "Rect":
             newObj = new Rect( x, y, w, h, c );
             break;
+      /* 他のオブジェクトはここに追加 */
       default:
             return;
     }
@@ -327,19 +332,31 @@ class GameModel extends Observable implements ActionListener{
 
   /* timerが動くたびにactionPerformedは勝手に呼び出される 1/60秒に1回 */
   public void actionPerformed ( ActionEvent e ) {
+    /* 初めのストーンのY座標 */
     int stone_initY = 700;
 
-    if( !isNull( this.getTargetStone() ) )
+    /* 
+    ターン遷移してよいかチェックする
+    <summary>
+    ターン遷移は全てのストーンの速度が０のときに起こす、としているが
+    初期状態もすべてのストーンの速度が０となってしまうので、初期座標にいるときはチェックしないことにしている
+    </summary>
+    */
+    if( !isNull( this.getTargetStone() ) ){
       if( this.getTargetStone().getY() != stone_initY )
         canChangeTurn = turnCheck();
+    
+    /* 衝突判定 */
     collisionCheck();
-    outerCheck();
+    /* 外側のストーン除去 */
+    outerStoneRemove();
+      
     /* ターン遷移して良い状態になったら */
-    if( canChangeTurn ){
+    if( getCanChangeTurn() ){
       changeTurn();
-      this.createStone(this.getW()/2, stone_initY, 50);
-      canRot = true;
-      canChangeTurn = false;
+      this.createStone( this.getW()/2 , stone_initY, 50 );
+      setCanRot( true );
+      setCanChangeTurn( false );
     }
 
     /* ここで observer(すなわちview) の update関数を呼ぶ */
@@ -408,7 +425,7 @@ class GameModel extends Observable implements ActionListener{
   public void changeTurn() {
 
     /* こするの禁止！ */
-    canRub = false;
+    setCanRub( false );
 
     /* ターゲットストーン を null に */
     setTargetStone( null );
@@ -425,8 +442,8 @@ class GameModel extends Observable implements ActionListener{
 
   }
 
-  /* ストーンが外側に行ったかどうかのチェック */
-  public void outerCheck(){
+  /* 外側のストーンを削除する関数 */
+  public void outerStoneRemove(){
     int size = this.getStones().size();
     for( int i = 0; i < size; i++ )
       if( !isNull( this.getStone( i ) ) )
@@ -455,7 +472,7 @@ class GameViewPanel extends JPanel implements Observer {
   }
   public void paintComponent( Graphics g ) {
     super.paintComponent( g );
-    /* ボーダーラインの描画 */
+    
     for( GameObject gameObj : model.getGameObjects() ) {
       gameObj.draw( g );
     }
@@ -466,7 +483,7 @@ class GameViewPanel extends JPanel implements Observer {
   /* 1/60秒で呼ばれる */
   public void update( Observable o, Object arg ) {
 
-    /* 全オブジェクトを物理演算の対象にする */
+    /* 全オブジェクトを物理演算の対象にする,これはmodelで動かしてもいいかも */
     for(GameObject gameObj : model.getGameObjects() ) {
       gameObj.move();
     }
