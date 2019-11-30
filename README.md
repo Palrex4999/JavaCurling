@@ -8,6 +8,7 @@ Java Curling Game
     - Stone  
     - Border  
   - Rect  
+  
 GameObjectには、値をsetするメソッドや, getするメソッドがある  
 速度,加速度に従って動くようになっている  
   
