@@ -1,3 +1,5 @@
+package game;
+
 import javax.swing.*;
 import javax.swing.border.*;
 import java.awt.*;
@@ -75,33 +77,34 @@ class GameObject {
      x += vx;
      y += vy;
     /* vyの制御 */
-    if( sgn( vy ) != 0 ){
+    if ( sgn( vy ) != 0 ){
        if( vy * sgn( vy ) > FIXED )
         vy += ay;
        else
         vy = 0.0f;
-    }else{
+    }else
        vy = 0.0f;
-    }
+    
      /* vxの制御 */
-    if( sgn( vx ) != 0 ) {
-
-      if( vy * sgn( vx ) > FIXED )
+    if ( sgn( vx ) != 0 ) {
+      if ( vy * sgn( vx ) > FIXED )
        vx += ax;
       else
        vx = 0.0f;
-
-    }else{
-      vx = 0.0f;
     }
+    else
+      vx = 0.0f;
 
   }
 
   /* 符号関数 正なら1,負なら-1,0なら0を返す */
   private int sgn( float a ){
-    if( a > 0 ) return 1;
-    else if( a < 0 ) return -1;
-    else return 0;
+    if ( a > 0 )
+      return 1;
+    else if ( a < 0 )
+      return -1;
+    else
+      return 0;
   }
 
 }
@@ -248,7 +251,7 @@ class GameModel extends Observable implements ActionListener{
   
   public GameObject getGameObject( int idx ) {
     /* ０未満、size以上のindexを指定したらnullを返す */
-    if(gameObjs.size() <= idx || idx < 0 )
+    if (gameObjs.size() <= idx || idx < 0 )
       return null;
     else
       return gameObjs.get( idx );
@@ -256,7 +259,7 @@ class GameModel extends Observable implements ActionListener{
 
   public Stone getStone( int idx ) {
     /* ０未満、size以上のindexを指定したらnullを返す */
-    if(stones.size() <= idx || idx < 0 )
+    if (stones.size() <= idx || idx < 0 )
       return null;
     else
       return stones.get( idx );
@@ -302,7 +305,7 @@ class GameModel extends Observable implements ActionListener{
   /* クラス名を指定してオブジェクトを生成する関数, 半径を指定するバージョン */
   public void createObject( String className, int x, int y, int r, Color c ) {
     GameObject newObj;
-    switch( className ){
+    switch ( className ) {
       case "Border":
             newObj = new Border( x, y, r, c );
             break;
@@ -317,7 +320,7 @@ class GameModel extends Observable implements ActionListener{
   /* クラス名を指定してオブジェクトを生成する関数, 幅と高さを指定するバージョン */
   public void createObject( String className, int x, int y, int w, int h, Color c ) {
     GameObject newObj;
-    switch( className ){
+    switch ( className ) {
       case "Rect":
             newObj = new Rect( x, y, w, h, c );
             break;
@@ -342,8 +345,8 @@ class GameModel extends Observable implements ActionListener{
     初期状態もすべてのストーンの速度が０となってしまうので、初期座標にいるときはチェックしないことにしている
     </summary>
     */
-    if( !isNull( this.getTargetStone() ) ){
-      if( this.getTargetStone().getY() != stone_initY )
+    if ( !isNull( this.getTargetStone() ) ){
+      if ( this.getTargetStone().getY() != stone_initY )
         canChangeTurn = turnCheck();
     
     /* 衝突判定 */
@@ -352,7 +355,7 @@ class GameModel extends Observable implements ActionListener{
     outerStoneRemove();
       
     /* ターン遷移して良い状態になったら */
-    if( getCanChangeTurn() ){
+    if ( getCanChangeTurn() ){
       changeTurn();
       this.createStone( this.getW()/2 , stone_initY, 50 );
       setCanRot( true );
@@ -375,7 +378,7 @@ class GameModel extends Observable implements ActionListener{
         continue;
 
       for ( int j = i + 1; j < size; j++ ){
-        if( isNull( this.getStone( j ) ) )
+        if ( isNull( this.getStone( j ) ) )
           continue;
         
         twoStoneCollision( this.getStone( i ), this.getStone( j ) );
@@ -390,7 +393,7 @@ class GameModel extends Observable implements ActionListener{
 
   public void twoStoneCollision( Stone s1, Stone s2 ) {
     /* ２つのストーンが接したとき */
-    if( isTouched(s1.getX(), s1.getY(), s2.getX(), s2.getY(), s1.getR(), s2.getR() ) ){
+    if ( isTouched(s1.getX(), s1.getY(), s2.getX(), s2.getY(), s1.getR(), s2.getR() ) ){
       /*
       <summary> 
       その２つのストーンが「どちらも既に衝突済み」だったら飛ばす
@@ -398,7 +401,7 @@ class GameModel extends Observable implements ActionListener{
       それを避けるのための例外処理
       </summary>
       */
-      if( !s1.getCollided() || !s2.getCollided () ){
+      if ( !s1.getCollided() || !s2.getCollided () ){
         /* 互いの速度を入れ替える */
         float tmpVX = s1.getVX();
         float tmpVY = s1.getVY();
@@ -413,9 +416,9 @@ class GameModel extends Observable implements ActionListener{
   /* ターン遷移OKならtrue, さもなくばfalseを返す関数 */
   public boolean turnCheck(){
     boolean isOK = true;
-    for(Stone stone : this.getStones() ) {
+    for (Stone stone : this.getStones() ) {
       /* 一応現時点ではすべてのストーンの速度が０になっている時にターン遷移OKとしている */
-      if( stone.getVX() != 0.0f || stone.getVY() != 0.0f ){
+      if ( stone.getVX() != 0.0f || stone.getVY() != 0.0f ){
         isOK = false;
       }
     }
@@ -437,7 +440,7 @@ class GameModel extends Observable implements ActionListener{
     currentColor = (is_Player1_turn) ? Color.red : Color.yellow;
 
     /* すべてのストーンを「衝突済みでない」状態にする */
-    for( Stone stone : this.getStones() )
+    for ( Stone stone : this.getStones() )
       stone.setCollided( false );
 
   }
@@ -445,9 +448,9 @@ class GameModel extends Observable implements ActionListener{
   /* 外側のストーンを削除する関数 */
   public void outerStoneRemove(){
     int size = this.getStones().size();
-    for( int i = 0; i < size; i++ )
-      if( !isNull( this.getStone( i ) ) )
-        if( isOut( this.getStone( i ) ) )
+    for ( int i = 0; i < size; i++ )
+      if ( !isNull( this.getStone( i ) ) )
+        if ( isOut( this.getStone( i ) ) )
           this.getStones().remove( i ); /* 外側にいるストーンを取り除く */
   }
 
@@ -473,10 +476,10 @@ class GameViewPanel extends JPanel implements Observer {
   public void paintComponent( Graphics g ) {
     super.paintComponent( g );
     
-    for( GameObject gameObj : model.getGameObjects() ) {
+    for ( GameObject gameObj : model.getGameObjects() ) {
       gameObj.draw( g );
     }
-    for( Stone stone : model.getStones() ) {
+    for ( Stone stone : model.getStones() ) {
       stone.draw( g );
     }
   }
@@ -484,10 +487,10 @@ class GameViewPanel extends JPanel implements Observer {
   public void update( Observable o, Object arg ) {
 
     /* 全オブジェクトを物理演算の対象にする,これはmodelで動かしてもいいかも */
-    for(GameObject gameObj : model.getGameObjects() ) {
+    for (GameObject gameObj : model.getGameObjects() ) {
       gameObj.move();
     }
-    for(Stone stone : model.getStones() ) {
+    for (Stone stone : model.getStones() ) {
       stone.move();
     }
     repaint();
@@ -522,11 +525,11 @@ class GameFrame extends JFrame {
 
 class GameController implements MouseListener,MouseMotionListener,KeyListener {
   protected GameModel model;
-  public GameController( GameModel a ) {
-    model = a;
+  public GameController( GameModel m ) {
+    model = m;
     /* ボーダーラインの生成 */
-    model.createObject( "Border", model.getW()/2, 100, 100, Color.red);
-    model.createObject( "Border", model.getW()/2, 100, 300, Color.blue);
+    model.createObject( "Border", model.getW()/2, 100, 100, Color.red );
+    model.createObject( "Border", model.getW()/2, 100, 300, Color.blue );
     /* 一番最初のストーンの生成 */
     model.createStone( model.getW()/2, 700, 50 );
   }
@@ -536,11 +539,11 @@ class GameController implements MouseListener,MouseMotionListener,KeyListener {
   public void mousePressed( MouseEvent e ) {
     /* 実際にはマウスホイールの時にこの動作を行なうが、いまはとりあえず動作確認ということでmousePressedに入れている */
     /* ホイールが回転開始したら速度を与えるようにしたい */
-    if( model.getTargetStone() != null && model.getCanRot() ) {
+    if ( model.getTargetStone() != null && model.getCanRot() ) {
       /* 実際には、ホイールの値を読み終わった後に以下を実行するので、もうちょい条件が必要 */
 
       /* 実際にはホイールの値をrotationに代入する */
-      model.setRotation(-20.0f);
+      model.setRotation( -20.0f );
 
       /* ホイールの回転具合によって速度を設定する */
       model.getTargetStone().setV( 0.0f, model.getRotation() );
@@ -548,11 +551,11 @@ class GameController implements MouseListener,MouseMotionListener,KeyListener {
       /* 摩擦係数固定の状態で加速度を設定する */
       model.getTargetStone().startSliding();
 
-      model.setCanRot(false); model.setCanRub(true);
+      model.setCanRot( false ); model.setCanRub( true );
     }
   }
   public void mouseDragged(MouseEvent e) {
-    if( model.getCanRub() ) {
+    if ( model.getCanRub() ) {
         /* この辺で摩擦係数をいじる操作を追加 */
         /* model.getTargetStone().setNewAY(0.4f); とか */
     }
