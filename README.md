@@ -2,11 +2,12 @@
 Java Curling Game  
   
 # クラスの構成  
+より中の階層にいるのは子クラス  
 - GameObject  
--- Circle  
---- Stone  
---- Border  
--- Rect  
+  - Circle  
+    - Stone  
+    - Border  
+- Rect  
   
 - GameModel  
 基本的にmodelにゲーム内の変数をぶち込む  
