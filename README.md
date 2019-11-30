@@ -36,6 +36,8 @@ model.getObject.setValue();みたいな。
   
 ## ダブルクリックだけでプログラムを実行させたいときにやること
   
+まず、gameという名前のディレクトリの中にGameFrame.javaを設置する  
+  
 ```
 javac GameFrame.java
 jar cvf Game.jar *.class
@@ -56,4 +58,6 @@ jar cvfm Game.jar META-INF/MANIFEST.MF *.class
 ```
   
 そして生成されたGame.jarをダブルクリックして実行できるかどうかを確認する  
+Javaの欠点として、.lassファイルのバージョンが違うだけで全然動作しなくなるというところがあるので、  
+IEDでみんなにやらせたいときはIEDでこれらのコマンドを実行して生成するのが無難
   
