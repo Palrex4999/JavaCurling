@@ -32,5 +32,28 @@ viewは、各オブジェクトのdrawを実行している感じ
 model.getObject.setValue();みたいな。  
   
 ## 各クラスのメソッド
- コードの中にコメントたくさん書いたから読んでくれれば多分分かる？  
- 
+コードの中にコメントたくさん書いたから読んでくれれば多分分かる？  
+  
+## ダブルクリックで実行させたいときにやること
+  
+```
+javac GameFrame.java
+jar cvf Game.jar *.class
+jar xvf Game.jar
+```
+  
+までやったら新たに生成された META-INF/MANIFEST.MF のファイル内の空行に以下を追加する  
+  
+```
+Main-Class: GameFrame
+(空行)
+```
+  
+そして以下を実行する  
+  
+```
+jar cvfm Game.jar META-INF/MANIFEST.MF *.class
+```
+  
+そして生成されたGame.jarをダブルクリックして実行できるかどうかを確認する  
+  
