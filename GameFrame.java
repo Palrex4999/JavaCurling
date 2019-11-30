@@ -66,6 +66,7 @@ class GameObject {
   /* ブラシをかける人も多分一緒に動くのでGameObjectクラスに置いておいた */
   public void startSliding() {
     this.ay = k*-sgn(vy);
+    this.ax = k*-sgn(vx);
   }
 
   /* 描画の指定方法が 1.widthとheight 2.rのみ など様々なのでdrawは各々のクラスでオーバーライドする */
@@ -87,7 +88,7 @@ class GameObject {
     
      /* vxの制御 */
     if ( sgn( vx ) != 0 ) {
-      if ( vy * sgn( vx ) > FIXED )
+      if ( vx * sgn( vx ) > FIXED )
        vx += ax;
       else
        vx = 0.0f;
