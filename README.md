@@ -1,7 +1,7 @@
 # JavaCurling  
 Java Curling Game  
   
-# クラスの構成  
+## クラスの構成  
 より中の階層にいるのは子クラス  
 - GameObject  
   - Circle  
@@ -25,6 +25,6 @@ viewは、各オブジェクトのdrawを実行している感じ
 プレイヤー操作を受けつけて、model内の変数を操作する  
 model.object.setValue();みたいな。  
   
-# 各クラスのメソッド
+## 各クラスのメソッド
  コメントたくさん書いたから読んで  
  
