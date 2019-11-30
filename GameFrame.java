@@ -524,17 +524,18 @@ class GameController implements MouseListener,MouseMotionListener,KeyListener {
   protected GameModel model;
   public GameController( GameModel a ) {
     model = a;
+    /* ボーダーラインの生成 */
     model.createObject( "Border", model.getW()/2, 100, 100, Color.red);
     model.createObject( "Border", model.getW()/2, 100, 300, Color.blue);
-    /* 実際には、敵味方のターンの入れ替わりでこの動作を実行 */
-    model.createStone( model.getW()/2, 700, 50 ); /* ストーンの生成*/
+    /* 一番最初のストーンの生成 */
+    model.createStone( model.getW()/2, 700, 50 );
   }
 
   /* マウス操作 */
   public void mouseClicked( MouseEvent e ) { }
   public void mousePressed( MouseEvent e ) {
     /* 実際にはマウスホイールの時にこの動作を行なうが、いまはとりあえず動作確認ということでmousePressedに入れている */
-    /* ホイールが回転開始したら速度を与える */
+    /* ホイールが回転開始したら速度を与えるようにしたい */
     if( model.getTargetStone() != null && model.getCanRot() ) {
       /* 実際には、ホイールの値を読み終わった後に以下を実行するので、もうちょい条件が必要 */
 
